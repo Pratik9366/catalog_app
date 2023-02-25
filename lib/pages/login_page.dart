@@ -1,51 +1,93 @@
+import 'package:catalog_app/utils/routes.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String name = "";
+  bool changeButton = false;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,
-      child: Column(children: [
-        //pic
-        Image.asset("assets/images/hey.png", fit: BoxFit.cover),
+      child: Column(
+        children: [
+          //pic
+          Image.asset("assets/images/hey.png", fit: BoxFit.cover),
 
-        //padding
-        const SizedBox(height: 20),
+          //padding
+          const SizedBox(height: 20),
 
-        //Text
-        const Text(
-          "Welcome",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-
-        //Username & PAssword
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                    hintText: "Enter Username", labelText: "Username"),
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(
-                    hintText: "Enter Password", labelText: "Password"),
-              ),
-              const SizedBox(height: 20.0),
-
-              //Login button
-              ElevatedButton(
-                style: TextButton.styleFrom(),
-                onPressed: () {},
-                child: const Text("Login"),
-              ),
-            ],
+          //Text
+          Text(
+            "Welcome $name",
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
           ),
-        ),
-      ]),
+
+          //Username & PAssword
+          Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 16.0, horizontal: 32.0),
+              child: Column(children: [
+                TextFormField(
+                  decoration: const InputDecoration(
+                      hintText: "Enter Username", labelText: "Username"),
+                  //For adding name with welcome
+                  onChanged: (value) {
+                    name = value;
+                    setState(() {});
+                  },
+                ),
+                TextFormField(
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                      hintText: "Enter Password", labelText: "Password"),
+                ),
+                const SizedBox(height: 30.0),
+                InkWell(
+                    onTap: () async {
+                      setState(() {
+                        changeButton = true;
+                      });
+                      await Future.delayed(const Duration(seconds: 1));
+                      Navigator.pushNamed(context, MyRoutes.homeRoute);
+                    },
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      width: changeButton ? 50 : 150,
+                      height: 50,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple,
+                        borderRadius:
+                            BorderRadius.circular(changeButton ? 50 : 8),
+                      ),
+                      child: changeButton? const Icon(Icons.done, color: Colors.white)
+                          : const Text(
+                              "Login",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                    )
+
+                    //Login button
+                    // ElevatedButton(
+                    // style:TextButton.styleFrom(minimumSize: const Size(150, 40)),
+                    // onPressed: () {Navigator.pushNamed(context, MyRoutes.homeRoute);},
+                    // child: const Text("Login"),
+                    // ),
+                    ),
+              ])),
+        ],
+      ),
     );
   }
 }
